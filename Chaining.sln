@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaining", "Chaining\Chaining.csproj", "{C73496C7-0C0E-4223-B47E-823165E429DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chaining.Tests", "Chaining.Tests\Chaining.Tests.csproj", "{FF4149D7-2E2D-4813-A377-FA35F15AA1A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C73496C7-0C0E-4223-B47E-823165E429DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C73496C7-0C0E-4223-B47E-823165E429DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C73496C7-0C0E-4223-B47E-823165E429DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C73496C7-0C0E-4223-B47E-823165E429DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF4149D7-2E2D-4813-A377-FA35F15AA1A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF4149D7-2E2D-4813-A377-FA35F15AA1A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF4149D7-2E2D-4813-A377-FA35F15AA1A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF4149D7-2E2D-4813-A377-FA35F15AA1A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
