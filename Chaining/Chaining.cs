@@ -55,5 +55,10 @@ namespace Chaining
         {
             return builder;
         }
+
+        public static T If<T>(this T builder, bool condition, Action<T> True, Action<T> False = null) where T : IEquationBuilder
+        {
+            return builder;
+        }
     }
 }

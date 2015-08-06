@@ -32,7 +32,7 @@ namespace Chaining.Tests
                 builder
                     .Value(1)
                     .Add()
-                    .Bold(localBuilder => localBuilder.Value(2))
+                    .Bold(b => b.Value(2))
                     .Add()
                     .Value(3);
             }
@@ -43,12 +43,11 @@ namespace Chaining.Tests
                 builder
                     .Value(1)
                     .Add()
-                    .Bold(localBuilder =>
+                    .Bold(b =>
                         {
-                            localBuilder
-                                .Value(2)
-                                .Add()
-                                .Value(3);
+                            b.Value(2)
+							.Add()
+							.Value(3);
                         })
                     .Add()
                     .Value(4);
@@ -60,7 +59,7 @@ namespace Chaining.Tests
                 builder
                     .Value(1)
                     .Add()
-                    .Bold(localBuilder => localBuilder.Literal("x"))
+                    .Bold(b => b.Literal("x"))
                     .Add()
                     .Value(3);
             }
@@ -73,12 +72,11 @@ namespace Chaining.Tests
                     .Add()
                     .Value(2)
                     .Add()
-                    .Parentheses(localBuilder =>
+                    .Parentheses(b =>
                     {
-                        localBuilder
-                           .Value(2)
-                           .Add()
-                           .Value(2);
+                        b.Value(2)
+                        .Add()
+                        .Value(2);
                     });
             }
 
@@ -88,12 +86,11 @@ namespace Chaining.Tests
                 builder
                     .Value(1)
                     .Divide()
-                    .Parentheses(localBuilder =>
+                    .Parentheses(b =>
                     {
-                        localBuilder
-                           .Value(2)
-                           .Add()
-                           .Value(3);
+                        b.Value(2)
+                        .Add()
+                        .Value(3);
                     });
             }
 
@@ -102,13 +99,36 @@ namespace Chaining.Tests
 
                 builder
                     .Value(1)
-                    .Divide(localBuilder =>
+                    .Divide(b =>
                     {
-                        localBuilder
-                            .Value(2)
-                            .Add()
-                            .Value(3);
+                        b.Value(2)
+                        .Add()
+                        .Value(3);
                     });
+            }
+
+            {
+                var builder = new EquationBuilder(destination);
+                var adding = true;
+
+                builder
+                    .Value(1)
+                    .If(adding,
+                        True: b => b.Add(),
+                        False: b => b.Divide())
+                    .Value(2);
+            }
+
+            {
+                var builder = new EquationBuilder(destination);
+                var needExtraValues = true;
+
+                builder
+                    .Value(1)
+					.Add()
+                    .If(needExtraValues,
+                        True: b => b.Value(3).Add().Value(4).Add())
+                    .Value(2);
             }
         }
     }
