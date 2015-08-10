@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Chaining.Tests
 {
@@ -114,8 +115,8 @@ namespace Chaining.Tests
                 builder
                     .Value(1)
                     .If(adding,
-                        True: b => b.Add(),
-                        False: b => b.Divide())
+                        onTrue: b => b.Add(),
+                        onFalse: b => b.Divide())
                     .Value(2);
             }
 
@@ -127,8 +128,52 @@ namespace Chaining.Tests
                     .Value(1)
 					.Add()
                     .If(needExtraValues,
-                        True: b => b.Value(3).Add().Value(4).Add())
+                        onTrue: b => b.Value(3).Add().Value(4).Add())
                     .Value(2);
+            }
+
+            {
+                var builder = new EquationBuilder(destination);
+
+                builder
+                    .Map(Enumerable.Repeat(1, 10), (b, element) =>
+                        b.Value(element).Add())
+                    .Value(1);
+            }
+
+            {
+                var builder = new EquationBuilder(destination);
+
+                builder
+                    .Map(Enumerable.Range(100, 9),
+                        action: (b, element, index) =>
+                            b.Value(element)
+                            .Divide()
+                            .Value(index)
+                            .Add())
+                    .Value(110)
+                    .Divide()
+                    .Value(10);
+            }
+
+            {
+                var builder = new EquationBuilder(destination);
+
+                builder
+                    .Reduce(Enumerable.Range(0, 9),
+                        seed: 0,
+                        action: (previouse, element) => previouse + element,
+                        onEnd: (b, final) => b.Value(final));
+            }
+
+            {
+                var builder = new EquationBuilder(destination);
+
+                builder
+                    .Reduce(Enumerable.Range(0, 9),
+                        seed: 0,
+                        action: (previouse, element, index) => previouse + element * index,
+                        onEnd: (b, final) => b.Value(final));
             }
         }
     }
