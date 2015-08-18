@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KeyType = System.Int32;
 
 namespace Chaining
 {
-    public class KeyProvider
+    public interface IKeyProvider
     {
-        private int counter;
+        KeyType Key();
+    }
 
-        public int Key()
+    public class KeyProvider : IKeyProvider
+    {
+        private KeyType counter;
+
+        public KeyType Key()
         {
             var key = counter;
             counter += 1;
