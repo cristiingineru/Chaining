@@ -41,5 +41,14 @@ namespace Chaining
             }
             return value;
         }
+
+        public void SetParent(KeyType childKey, KeyType parentKey)
+        {
+            KeyType actualKey;
+            if (!data.TryGetKey(parentKey, out actualKey))
+            {
+                throw new ArgumentException("parentKey not found");
+            }
+        }
     }
 }

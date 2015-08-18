@@ -77,5 +77,30 @@ namespace Chaining.Tests
 
             Assert.AreEqual(value, returnedValue);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Tree_SetParentWithInvalidParentKey_Fails()
+        {
+            var tree = NewTree<string>();
+
+            var childKey = tree.Add("child");
+            var parentKey = InvalidKey();
+
+            tree.SetParent(childKey, parentKey);
+        }
+
+
+        private KeyType InvalidKey()
+        {
+            return -1;
+        }
+
+        private Tree<T> NewTree<T>()
+        {
+            var keyProvider = new KeyProvider();
+            var tree = new Tree<T>(keyProvider);
+            return tree;
+        }
     }
 }
