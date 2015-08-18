@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Immutable.Tests.cs" />
+    <Compile Include="KeyProvider.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chaining\Chaining.csproj">
