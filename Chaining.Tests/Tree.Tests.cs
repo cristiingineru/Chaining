@@ -90,6 +90,43 @@ namespace Chaining.Tests
             tree.SetParent(childKey, parentKey);
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Tree_SetParentWithInvalidChildKey_Fails()
+        {
+            var tree = NewTree<string>();
+
+            var parentKey = tree.Add("parent");
+            var childKey = InvalidKey();
+
+            tree.SetParent(childKey, parentKey);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Tree_GetParentOfAChildWithNoParent_Fails()
+        {
+            var tree = NewTree<string>();
+
+            var childKey = tree.Add("child");
+
+            tree.GetParent(childKey);
+        }
+
+        [TestMethod]
+        public void Tree_GetParentOfAChildWithParent_ReturnsTheParent()
+        {
+            var tree = NewTree<string>();
+            var childKey = tree.Add("child");
+            var parentKey = tree.Add("parent");
+
+            tree.SetParent(childKey, parentKey);
+
+            var foundParentKey = tree.GetParent(childKey);
+
+            Assert.AreEqual(parentKey, foundParentKey);
+        }
+
 
         private KeyType InvalidKey()
         {

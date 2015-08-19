@@ -11,7 +11,8 @@ namespace Chaining
     public class Tree<T>
     {
         private IKeyProvider keyProvider;
-        private ImmutableDictionary<KeyType, T> data;
+        private ImmutableDictionary<KeyType, T> keyToValueDictionary;
+        private ImmutableDictionary<KeyType, KeyType> childToParentDictionary;
 
         public Tree(IKeyProvider keyProvider)
         {
@@ -22,20 +23,21 @@ namespace Chaining
 
             this.keyProvider = keyProvider;
 
-            this.data = ImmutableDictionary<KeyType, T>.Empty;
+            this.keyToValueDictionary = ImmutableDictionary<KeyType, T>.Empty;
+            this.childToParentDictionary = ImmutableDictionary<KeyType, KeyType>.Empty;
         }
 
         public KeyType Add(T value)
         {
             var key = keyProvider.Key();
-            data = data.Add(key, value);
+            keyToValueDictionary = keyToValueDictionary.Add(key, value);
             return key;
         }
 
         public T Get(KeyType key)
         {
             T value;
-            if (!data.TryGetValue(key, out value))
+            if (!keyToValueDictionary.TryGetValue(key, out value))
             {
                 throw new ArgumentException("key not found");
             }
@@ -45,10 +47,26 @@ namespace Chaining
         public void SetParent(KeyType childKey, KeyType parentKey)
         {
             KeyType actualKey;
-            if (!data.TryGetKey(parentKey, out actualKey))
+            if (!keyToValueDictionary.TryGetKey(childKey, out actualKey))
+            {
+                throw new ArgumentException("childKey not found");
+            }
+            if (!keyToValueDictionary.TryGetKey(parentKey, out actualKey))
             {
                 throw new ArgumentException("parentKey not found");
             }
+
+            childToParentDictionary = childToParentDictionary.SetItem(childKey, parentKey);
+        }
+
+        public KeyType GetParent(KeyType childKey)
+        {
+            KeyType parentKey;
+            if (!childToParentDictionary.TryGetValue(childKey, out parentKey))
+            {
+                throw new ArgumentException("childKey not found");
+            }
+            return parentKey;
         }
     }
 }
