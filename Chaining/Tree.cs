@@ -82,6 +82,11 @@ namespace Chaining
             return rootKey;
         }
 
+        public IEnumerable<KeyType> GetChildren(KeyType parentKey)
+        {
+            return Enumerable.Empty<KeyType>();
+        }
+
 
         private KeyType InvalidKey()
         {

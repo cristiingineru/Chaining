@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using KeyType = System.Int32;
 
@@ -146,6 +147,31 @@ namespace Chaining.Tests
             var returnedRootKey = tree.GetRoot();
 
             Assert.AreEqual(rootKey, returnedRootKey);
+        }
+
+        [TestMethod]
+        public void Tree_GetChildrenOfRootWithNoChild_ReturnsEmptyChildList()
+        {
+            var tree = NewTree<string>();
+            var rootKey = tree.AddRoot("root");
+
+            var childen = tree.GetChildren(rootKey);
+
+            Assert.AreEqual(0, childen.Count());
+        }
+
+        [TestMethod]
+        public void Tree_GetChildrenOfRootWithSingleChild_ReturnsTheChildInAList()
+        {
+            var tree = NewTree<string>();
+            var rootKey = tree.AddRoot("root");
+            var childKey = tree.AddNode("child");
+            tree.SetParent(childKey, rootKey);
+
+            var childen = tree.GetChildren(rootKey);
+
+            Assert.AreEqual(1, childen.Count());
+            Assert.AreEqual(childKey, childen.ElementAt(0));
         }
 
 
