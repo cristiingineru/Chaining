@@ -11,6 +11,7 @@ namespace Chaining
     public class Tree<T>
     {
         private IKeyProvider keyProvider;
+        private KeyType rootKey;
         private ImmutableDictionary<KeyType, T> keyToValueDictionary;
         private ImmutableDictionary<KeyType, KeyType> childToParentDictionary;
 
@@ -23,18 +24,19 @@ namespace Chaining
 
             this.keyProvider = keyProvider;
 
+            this.rootKey = InvalidKey();
             this.keyToValueDictionary = ImmutableDictionary<KeyType, T>.Empty;
             this.childToParentDictionary = ImmutableDictionary<KeyType, KeyType>.Empty;
         }
 
-        public KeyType Add(T value)
+        public KeyType AddNode(T value)
         {
             var key = keyProvider.Key();
             keyToValueDictionary = keyToValueDictionary.Add(key, value);
             return key;
         }
 
-        public T Get(KeyType key)
+        public T Value(KeyType key)
         {
             T value;
             if (!keyToValueDictionary.TryGetValue(key, out value))
@@ -67,6 +69,23 @@ namespace Chaining
                 throw new ArgumentException("childKey not found");
             }
             return parentKey;
+        }
+
+        public KeyType AddRoot(T value)
+        {
+            rootKey = AddNode(value);
+            return rootKey;
+        }
+
+        public KeyType GetRoot()
+        {
+            return rootKey;
+        }
+
+
+        private KeyType InvalidKey()
+        {
+            return -1;
         }
     }
 }
