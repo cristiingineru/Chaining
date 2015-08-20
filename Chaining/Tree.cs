@@ -31,13 +31,6 @@ namespace Chaining
             parentToChildrenDictionary = ImmutableDictionary<KeyType, ImmutableArray<KeyType>>.Empty;
         }
 
-        public KeyType AddNode(T value)
-        {
-            var key = keyProvider.Key();
-            keyToValueDictionary = keyToValueDictionary.Add(key, value);
-            return key;
-        }
-
         public T ValueOf(KeyType key)
         {
             T value;
@@ -48,27 +41,28 @@ namespace Chaining
             return value;
         }
 
-        public void SetParent(KeyType childKey, KeyType parentKey)
+        public KeyType AddNode(T value, KeyType parentKey)
         {
             KeyType actualKey;
-            if (!keyToValueDictionary.TryGetKey(childKey, out actualKey))
-            {
-                throw new ArgumentException("childKey not found");
-            }
             if (!keyToValueDictionary.TryGetKey(parentKey, out actualKey))
             {
                 throw new ArgumentException("parentKey not found");
             }
 
-            childToParentDictionary = childToParentDictionary.SetItem(childKey, parentKey);
+            var nodeKey = keyProvider.Key();
+            keyToValueDictionary = keyToValueDictionary.Add(nodeKey, value);
+
+            childToParentDictionary = childToParentDictionary.SetItem(nodeKey, parentKey);
 
             ImmutableArray<KeyType> children;
             if (!parentToChildrenDictionary.TryGetValue(parentKey, out children))
             {
                 children = ImmutableArray<KeyType>.Empty;
             }
-            children = children.Add(childKey);
+            children = children.Add(nodeKey);
             parentToChildrenDictionary = parentToChildrenDictionary.SetItem(parentKey, children);
+
+            return nodeKey;
         }
 
         public KeyType GetParent(KeyType childKey)
@@ -83,7 +77,8 @@ namespace Chaining
 
         public KeyType AddRoot(T value)
         {
-            rootKey = AddNode(value);
+            rootKey = keyProvider.Key();
+            keyToValueDictionary = keyToValueDictionary.Add(rootKey, value);
             return rootKey;
         }
 
