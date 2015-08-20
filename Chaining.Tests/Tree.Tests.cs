@@ -56,17 +56,17 @@ namespace Chaining.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void Tree_ValueWithInvalidKey_Fails()
+        public void Tree_ValueOfWithInvalidKey_Fails()
         {
             var keyProvider = new KeyProvider();
             var tree = new Tree<string>(keyProvider);
 
             var invalidKey = -1;
-            tree.Value(invalidKey);
+            tree.ValueOf(invalidKey);
         }
 
         [TestMethod]
-        public void Tree_ValueWithValidKey_ReturnsThePreviouslyAddedValue()
+        public void Tree_ValueOfWithValidKey_ReturnsThePreviouslyAddedValue()
         {
             var keyProvider = new KeyProvider();
             var tree = new Tree<string>(keyProvider);
@@ -74,7 +74,7 @@ namespace Chaining.Tests
             var value = "value";
             var key = tree.AddNode(value);
 
-            var returnedValue = tree.Value(key);
+            var returnedValue = tree.ValueOf(key);
 
             Assert.AreEqual(value, returnedValue);
         }

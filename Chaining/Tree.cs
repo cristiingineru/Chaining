@@ -38,7 +38,7 @@ namespace Chaining
             return key;
         }
 
-        public T Value(KeyType key)
+        public T ValueOf(KeyType key)
         {
             T value;
             if (!keyToValueDictionary.TryGetValue(key, out value))
