@@ -65,7 +65,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Chaining.Builds.cs" />
+    <Compile Include="Scripting.Usecases.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
