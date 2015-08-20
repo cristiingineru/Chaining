@@ -23,6 +23,27 @@ namespace Chaining
     }
 
 
+    public interface IValue
+    {
+        int GetData();
+    }
+
+    public class Value : IValue
+    {
+        private int data;
+
+        public int GetData()
+        {
+            return data;
+        }
+
+        public Value SetData(int data)
+        {
+            this.data = data;
+            return this;
+        }
+    }
+
 
     public static class Operations
     {
@@ -30,6 +51,12 @@ namespace Chaining
         {
             return builder;
         }
+        public static T Value<T>(this T builder, int constant, out IValue value) where T : IEquationBuilder
+        {
+            value = (new Value()).SetData(constant);
+            return builder;
+        }
+
         public static T Literal<T>(this T builder, string variable) where T : IEquationBuilder
         {
             return builder;
