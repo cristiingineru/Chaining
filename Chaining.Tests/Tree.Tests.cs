@@ -174,6 +174,37 @@ namespace Chaining.Tests
             Assert.AreEqual(childKey, childen.ElementAt(0));
         }
 
+        [TestMethod]
+        public void Tree_GetChildrenOfRootWithTwoChildren_ReturnsTheChildrenInAList()
+        {
+            var tree = NewTree<string>();
+            var rootKey = tree.AddRoot("root");
+            var child1Key = tree.AddNode("child1");
+            tree.SetParent(child1Key, rootKey);
+            var child2Key = tree.AddNode("child2");
+            tree.SetParent(child2Key, rootKey);
+
+            var childen = tree.GetChildren(rootKey);
+
+            Assert.AreEqual(2, childen.Count());
+        }
+
+        [TestMethod]
+        public void Tree_GetChildrenOfNodeWithSingleChild_ReturnsTheChildInAList()
+        {
+            var tree = NewTree<string>();
+            var rootKey = tree.AddRoot("root");
+            var nodeKey = tree.AddNode("node");
+            var childKey = tree.AddNode("child");
+            tree.SetParent(nodeKey, rootKey);
+            tree.SetParent(childKey, nodeKey);
+
+            var childen = tree.GetChildren(nodeKey);
+
+            Assert.AreEqual(1, childen.Count());
+            Assert.AreEqual(childKey, childen.ElementAt(0));
+        }
+
 
         private KeyType InvalidKey()
         {

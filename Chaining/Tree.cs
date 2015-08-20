@@ -14,6 +14,7 @@ namespace Chaining
         private KeyType rootKey;
         private ImmutableDictionary<KeyType, T> keyToValueDictionary;
         private ImmutableDictionary<KeyType, KeyType> childToParentDictionary;
+        private ImmutableDictionary<KeyType, ImmutableArray<KeyType>> parentToChildrenDictionary;
 
         public Tree(IKeyProvider keyProvider)
         {
@@ -24,9 +25,10 @@ namespace Chaining
 
             this.keyProvider = keyProvider;
 
-            this.rootKey = InvalidKey();
-            this.keyToValueDictionary = ImmutableDictionary<KeyType, T>.Empty;
-            this.childToParentDictionary = ImmutableDictionary<KeyType, KeyType>.Empty;
+            rootKey = InvalidKey();
+            keyToValueDictionary = ImmutableDictionary<KeyType, T>.Empty;
+            childToParentDictionary = ImmutableDictionary<KeyType, KeyType>.Empty;
+            parentToChildrenDictionary = ImmutableDictionary<KeyType, ImmutableArray<KeyType>>.Empty;
         }
 
         public KeyType AddNode(T value)
@@ -59,6 +61,14 @@ namespace Chaining
             }
 
             childToParentDictionary = childToParentDictionary.SetItem(childKey, parentKey);
+
+            ImmutableArray<KeyType> children;
+            if (!parentToChildrenDictionary.TryGetValue(parentKey, out children))
+            {
+                children = ImmutableArray<KeyType>.Empty;
+            }
+            children = children.Add(childKey);
+            parentToChildrenDictionary = parentToChildrenDictionary.SetItem(parentKey, children);
         }
 
         public KeyType GetParent(KeyType childKey)
@@ -84,6 +94,11 @@ namespace Chaining
 
         public IEnumerable<KeyType> GetChildren(KeyType parentKey)
         {
+            ImmutableArray<KeyType> children;
+            if (parentToChildrenDictionary.TryGetValue(parentKey, out children))
+            {
+                return children.AsEnumerable();
+            }
             return Enumerable.Empty<KeyType>();
         }
 
