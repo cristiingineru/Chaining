@@ -34,6 +34,12 @@ namespace Chaining
             state = BuildInitialState();
         }
 
+        private Tree(IKeyProvider keyProvider, State<T> state)
+        {
+            this.KeyProvider = keyProvider;
+            this.state = state;
+        }
+
         private State<T> BuildInitialState()
         {
             var initialState = new State<T>();
@@ -56,7 +62,13 @@ namespace Chaining
             return value;
         }
 
-        public KeyType AddNode(T value, KeyType parentKey)
+        public Tree<T> AddNode(T value, KeyType parentKey)
+        {
+            KeyType key;
+            return AddNode(value, parentKey, out key);
+        }
+
+        public Tree<T> AddNode(T value, KeyType parentKey, out KeyType key)
         {
             KeyType actualKey;
             if (!state.keyToValueDictionary.TryGetKey(parentKey, out actualKey))
@@ -64,20 +76,22 @@ namespace Chaining
                 throw new ArgumentException("parentKey not found");
             }
 
-            var nodeKey = KeyProvider.Key();
-            state.keyToValueDictionary = state.keyToValueDictionary.Add(nodeKey, value);
+            State<T> newState = state;
 
-            state.childToParentDictionary = state.childToParentDictionary.SetItem(nodeKey, parentKey);
+            key = KeyProvider.Key();
+            newState.keyToValueDictionary = newState.keyToValueDictionary.Add(key, value);
+
+            newState.childToParentDictionary = newState.childToParentDictionary.SetItem(key, parentKey);
 
             ImmutableArray<KeyType> children;
-            if (!state.parentToChildrenDictionary.TryGetValue(parentKey, out children))
+            if (!newState.parentToChildrenDictionary.TryGetValue(parentKey, out children))
             {
                 children = ImmutableArray<KeyType>.Empty;
             }
-            children = children.Add(nodeKey);
-            state.parentToChildrenDictionary = state.parentToChildrenDictionary.SetItem(parentKey, children);
+            children = children.Add(key);
+            newState.parentToChildrenDictionary = newState.parentToChildrenDictionary.SetItem(parentKey, children);
 
-            return nodeKey;
+            return new Tree<T>(KeyProvider, newState);
         }
 
         public KeyType GetParent(KeyType childKey)
