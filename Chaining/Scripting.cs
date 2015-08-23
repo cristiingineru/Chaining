@@ -8,6 +8,11 @@ namespace Chaining
 
     public class EquationBuilder : IEquationBuilder
     {
+        public EquationBuilder()
+        {
+
+        }
+
         public EquationBuilder(Action<string> writer)
         {
 
@@ -16,6 +21,11 @@ namespace Chaining
     
     public class MarkupEquationBuilder : IEquationBuilder
     {
+        public MarkupEquationBuilder()
+        {
+
+        }
+
         public MarkupEquationBuilder(Action<string> writer)
         {
 
@@ -25,23 +35,12 @@ namespace Chaining
 
     public interface IValue
     {
-        int GetData();
+        int Constant { get; set; }
     }
 
     public class Value : IValue
     {
-        private int data;
-
-        public int GetData()
-        {
-            return data;
-        }
-
-        public Value SetData(int data)
-        {
-            this.data = data;
-            return this;
-        }
+        public int Constant { get; set; }
     }
 
 
@@ -53,7 +52,8 @@ namespace Chaining
         }
         public static T Value<T>(this T builder, int constant, out IValue value) where T : IEquationBuilder
         {
-            value = (new Value()).SetData(constant);
+            value = new Value();
+            value.Constant = constant;
             return builder;
         }
 

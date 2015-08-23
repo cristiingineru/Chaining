@@ -28,7 +28,7 @@ namespace Chaining.Tests
             IValue value;
             builder.Value(data, out value);
 
-            Assert.AreEqual(data, value.GetData());
+            Assert.AreEqual(data, value.Constant);
         }
     }
 }
