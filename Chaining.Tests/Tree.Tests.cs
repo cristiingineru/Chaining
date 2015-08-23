@@ -54,7 +54,7 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_AddRootWithKey_ReturnsAKey()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
 
             KeyType key;
             tree.AddRoot("root", out key);
@@ -134,7 +134,7 @@ namespace Chaining.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void Tree_AddNodeWithInvalidParentKey_Fails()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
 
             tree.AddNode("child", tree.KeyProvider.InvalidKey());
         }
@@ -142,7 +142,7 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_GetParentOfAChild_ReturnsTheParent()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
             KeyType rootKey;
             KeyType parentKey;
             KeyType childKey;
@@ -158,7 +158,7 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_GetRootWithoutAddRootFirst_ReturnsInvalidKey()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
 
             var rootKey = tree.GetRoot();
 
@@ -168,7 +168,7 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_GetRootAfterAddRootWithKeyFirst_ReturnsRootKey()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
             KeyType rootKey;
             tree = tree.AddRoot("root", out rootKey);
 
@@ -180,7 +180,7 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_GetChildrenOfRootWithNoChild_ReturnsEmptyChildList()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
             KeyType rootKey;
             tree.AddRoot("root", out rootKey);
 
@@ -192,7 +192,7 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_GetChildrenOfRootWithSingleChild_ReturnsTheChildInAList()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
             KeyType rootKey, childKey;
             tree = tree.AddRoot("root", out rootKey);
             tree = tree.AddNode("child", rootKey, out childKey);
@@ -206,7 +206,7 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_GetChildrenOfRootWithTwoChildren_ReturnsTheChildrenInAList()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
             KeyType rootKey;
             tree = tree.AddRoot("root", out rootKey);
             tree = tree.AddNode("child1", rootKey);
@@ -220,7 +220,7 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_GetChildrenOfNodeWithSingleChild_ReturnsTheChildInAList()
         {
-            var tree = NewTree<string>();
+            var tree = new Tree<string>();
             KeyType rootKey, nodeKey, childKey;
             tree = tree.AddRoot("root", out rootKey);
             tree = tree.AddNode("node", rootKey, out nodeKey);
@@ -230,14 +230,6 @@ namespace Chaining.Tests
 
             Assert.AreEqual(1, childen.Count());
             Assert.AreEqual(childKey, childen.ElementAt(0));
-        }
-
-
-        private Tree<T> NewTree<T>()
-        {
-            var keyProvider = new KeyProvider();
-            var tree = new Tree<T>(keyProvider);
-            return tree;
         }
     }
 }
