@@ -88,7 +88,7 @@ namespace Chaining.Tests
         {
             var tree = NewTree<string>();
 
-            tree.AddNode("child", InvalidKey());
+            tree.AddNode("child", tree.KeyProvider.InvalidKey());
         }
 
         [TestMethod]
@@ -111,7 +111,7 @@ namespace Chaining.Tests
 
             var rootKey = tree.GetRoot();
 
-            Assert.AreEqual(InvalidKey(), rootKey);
+            Assert.AreEqual(tree.KeyProvider.InvalidKey(), rootKey);
         }
 
         [TestMethod]
@@ -176,11 +176,6 @@ namespace Chaining.Tests
             Assert.AreEqual(childKey, childen.ElementAt(0));
         }
 
-
-        private KeyType InvalidKey()
-        {
-            return -1;
-        }
 
         private Tree<T> NewTree<T>()
         {

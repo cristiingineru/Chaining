@@ -10,17 +10,30 @@ namespace Chaining
     public interface IKeyProvider
     {
         KeyType Key();
+        KeyType InvalidKey();
+        bool IsValid(KeyType key);
     }
 
     public class KeyProvider : IKeyProvider
     {
-        private KeyType counter;
+        private const KeyType invalidKey = -1;
+        private KeyType counter = 0;
 
         public KeyType Key()
         {
             var key = counter;
             counter += 1;
             return key;
+        }
+
+        public int InvalidKey()
+        {
+            return invalidKey;
+        }
+
+        public bool IsValid(KeyType key)
+        {
+            return key != invalidKey;
         }
     }
 }

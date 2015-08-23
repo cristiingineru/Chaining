@@ -10,7 +10,7 @@ namespace Chaining
 {
     public class Tree<T>
     {
-        private IKeyProvider keyProvider;
+        public IKeyProvider KeyProvider { get; private set; }
 
         private State<T> state;
 
@@ -29,7 +29,7 @@ namespace Chaining
                 throw new ArgumentException("keyProvider can't be null");
             }
 
-            this.keyProvider = keyProvider;
+            this.KeyProvider = keyProvider;
 
             state = BuildInitialState();
         }
@@ -38,7 +38,7 @@ namespace Chaining
         {
             var initialState = new State<T>();
 
-            initialState.rootKey = InvalidKey();
+            initialState.rootKey = KeyProvider.InvalidKey();
             initialState.keyToValueDictionary = ImmutableDictionary<KeyType, T>.Empty;
             initialState.childToParentDictionary = ImmutableDictionary<KeyType, KeyType>.Empty;
             initialState.parentToChildrenDictionary = ImmutableDictionary<KeyType, ImmutableArray<KeyType>>.Empty;
@@ -64,7 +64,7 @@ namespace Chaining
                 throw new ArgumentException("parentKey not found");
             }
 
-            var nodeKey = keyProvider.Key();
+            var nodeKey = KeyProvider.Key();
             state.keyToValueDictionary = state.keyToValueDictionary.Add(nodeKey, value);
 
             state.childToParentDictionary = state.childToParentDictionary.SetItem(nodeKey, parentKey);
@@ -92,7 +92,7 @@ namespace Chaining
 
         public KeyType AddRoot(T value)
         {
-            state.rootKey = keyProvider.Key();
+            state.rootKey = KeyProvider.Key();
             state.keyToValueDictionary = state.keyToValueDictionary.Add(state.rootKey, value);
             return state.rootKey;
         }
@@ -110,12 +110,6 @@ namespace Chaining
                 return children.AsEnumerable();
             }
             return Enumerable.Empty<KeyType>();
-        }
-
-
-        private KeyType InvalidKey()
-        {
-            return -1;
         }
     }
 }

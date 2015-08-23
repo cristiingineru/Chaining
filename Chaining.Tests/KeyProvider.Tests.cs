@@ -24,5 +24,15 @@ namespace Chaining.Tests
 
             Assert.AreNotEqual(key1, key2);
         }
+
+        [TestMethod]
+        public void KeyProvider_InvalidKey_ReturnsInvalidKey()
+        {
+            var provider = new KeyProvider();
+
+            var key = provider.InvalidKey();
+
+            Assert.IsFalse(provider.IsValid(key));
+        }
     }
 }
