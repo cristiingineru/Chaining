@@ -11,10 +11,16 @@ namespace Chaining
     public class Tree<T>
     {
         private IKeyProvider keyProvider;
-        private KeyType rootKey;
-        private ImmutableDictionary<KeyType, T> keyToValueDictionary;
-        private ImmutableDictionary<KeyType, KeyType> childToParentDictionary;
-        private ImmutableDictionary<KeyType, ImmutableArray<KeyType>> parentToChildrenDictionary;
+
+        private State<T> state;
+
+        private struct State<U>
+        {
+            public KeyType rootKey;
+            public ImmutableDictionary<KeyType, U> keyToValueDictionary;
+            public ImmutableDictionary<KeyType, KeyType> childToParentDictionary;
+            public ImmutableDictionary<KeyType, ImmutableArray<KeyType>> parentToChildrenDictionary;
+        }
 
         public Tree(IKeyProvider keyProvider)
         {
@@ -25,16 +31,25 @@ namespace Chaining
 
             this.keyProvider = keyProvider;
 
-            rootKey = InvalidKey();
-            keyToValueDictionary = ImmutableDictionary<KeyType, T>.Empty;
-            childToParentDictionary = ImmutableDictionary<KeyType, KeyType>.Empty;
-            parentToChildrenDictionary = ImmutableDictionary<KeyType, ImmutableArray<KeyType>>.Empty;
+            state = BuildInitialState();
+        }
+
+        private State<T> BuildInitialState()
+        {
+            var initialState = new State<T>();
+
+            initialState.rootKey = InvalidKey();
+            initialState.keyToValueDictionary = ImmutableDictionary<KeyType, T>.Empty;
+            initialState.childToParentDictionary = ImmutableDictionary<KeyType, KeyType>.Empty;
+            initialState.parentToChildrenDictionary = ImmutableDictionary<KeyType, ImmutableArray<KeyType>>.Empty;
+
+            return initialState;
         }
 
         public T ValueOf(KeyType key)
         {
             T value;
-            if (!keyToValueDictionary.TryGetValue(key, out value))
+            if (!state.keyToValueDictionary.TryGetValue(key, out value))
             {
                 throw new ArgumentException("key not found");
             }
@@ -44,23 +59,23 @@ namespace Chaining
         public KeyType AddNode(T value, KeyType parentKey)
         {
             KeyType actualKey;
-            if (!keyToValueDictionary.TryGetKey(parentKey, out actualKey))
+            if (!state.keyToValueDictionary.TryGetKey(parentKey, out actualKey))
             {
                 throw new ArgumentException("parentKey not found");
             }
 
             var nodeKey = keyProvider.Key();
-            keyToValueDictionary = keyToValueDictionary.Add(nodeKey, value);
+            state.keyToValueDictionary = state.keyToValueDictionary.Add(nodeKey, value);
 
-            childToParentDictionary = childToParentDictionary.SetItem(nodeKey, parentKey);
+            state.childToParentDictionary = state.childToParentDictionary.SetItem(nodeKey, parentKey);
 
             ImmutableArray<KeyType> children;
-            if (!parentToChildrenDictionary.TryGetValue(parentKey, out children))
+            if (!state.parentToChildrenDictionary.TryGetValue(parentKey, out children))
             {
                 children = ImmutableArray<KeyType>.Empty;
             }
             children = children.Add(nodeKey);
-            parentToChildrenDictionary = parentToChildrenDictionary.SetItem(parentKey, children);
+            state.parentToChildrenDictionary = state.parentToChildrenDictionary.SetItem(parentKey, children);
 
             return nodeKey;
         }
@@ -68,7 +83,7 @@ namespace Chaining
         public KeyType GetParent(KeyType childKey)
         {
             KeyType parentKey;
-            if (!childToParentDictionary.TryGetValue(childKey, out parentKey))
+            if (!state.childToParentDictionary.TryGetValue(childKey, out parentKey))
             {
                 throw new ArgumentException("childKey not found");
             }
@@ -77,20 +92,20 @@ namespace Chaining
 
         public KeyType AddRoot(T value)
         {
-            rootKey = keyProvider.Key();
-            keyToValueDictionary = keyToValueDictionary.Add(rootKey, value);
-            return rootKey;
+            state.rootKey = keyProvider.Key();
+            state.keyToValueDictionary = state.keyToValueDictionary.Add(state.rootKey, value);
+            return state.rootKey;
         }
 
         public KeyType GetRoot()
         {
-            return rootKey;
+            return state.rootKey;
         }
 
         public IEnumerable<KeyType> GetChildren(KeyType parentKey)
         {
             ImmutableArray<KeyType> children;
-            if (parentToChildrenDictionary.TryGetValue(parentKey, out children))
+            if (state.parentToChildrenDictionary.TryGetValue(parentKey, out children))
             {
                 return children.AsEnumerable();
             }
