@@ -13,41 +13,32 @@ namespace Chaining
 
         }
 
-        public EquationBuilder(Action<string> writer)
+        public EquationBuilder Value(int constant)
         {
-
+            return this;
+        }
+        public EquationBuilder Literal(string variable)
+        {
+            return this;
+        }
+        public EquationBuilder Add()
+        {
+            return this;
+        }
+        public EquationBuilder Divide()
+        {
+            return this;
+        }
+        public EquationBuilder Divide(Action<EquationBuilder> expression)
+        {
+            return this;
+        }
+        public EquationBuilder Parentheses(Action<EquationBuilder> expression)
+        {
+            return this;
         }
     }
 
-    public static class EquationBuilderOperations
-    {
-        public static EquationBuilder Value(this EquationBuilder builder, int constant)
-        {
-            return builder;
-        }
-
-        public static EquationBuilder Literal(this EquationBuilder builder, string variable)
-        {
-            return builder;
-        }
-        public static EquationBuilder Add(this EquationBuilder builder)
-        {
-            return builder;
-        }
-        public static EquationBuilder Divide(this EquationBuilder builder)
-        {
-            return builder;
-        }
-        public static EquationBuilder Divide(this EquationBuilder builder, Action<EquationBuilder> expression)
-        {
-            return builder;
-        }
-
-        public static EquationBuilder Parentheses(this EquationBuilder builder, Action<EquationBuilder> expression)
-        {
-            return builder;
-        }
-    }
     
     public class MarkupEquationBuilder : IEquationBuilder
     {
@@ -56,44 +47,33 @@ namespace Chaining
 
         }
 
-        public MarkupEquationBuilder(Action<string> writer)
+        public MarkupEquationBuilder Value(int constant)
         {
-
+            return this;
         }
-    }
-
-    public static class MarkupEquationBuilderOperations
-    {
-        public static MarkupEquationBuilder Value(this MarkupEquationBuilder builder, int constant)
+        public MarkupEquationBuilder Literal(string variable)
         {
-            return builder;
+            return this;
         }
-
-        public static MarkupEquationBuilder Literal(this MarkupEquationBuilder builder, string variable)
+        public MarkupEquationBuilder Add()
         {
-            return builder;
+            return this;
         }
-        public static MarkupEquationBuilder Add(this MarkupEquationBuilder builder)
+        public MarkupEquationBuilder Divide()
         {
-            return builder;
+            return this;
         }
-        public static MarkupEquationBuilder Divide(this MarkupEquationBuilder builder)
+        public MarkupEquationBuilder Divide(Action<MarkupEquationBuilder> expression)
         {
-            return builder;
+            return this;
         }
-        public static MarkupEquationBuilder Divide(this MarkupEquationBuilder builder, Action<MarkupEquationBuilder> expression)
+        public MarkupEquationBuilder Parentheses(Action<MarkupEquationBuilder> expression)
         {
-            return builder;
+            return this;
         }
-
-        public static MarkupEquationBuilder Parentheses(this MarkupEquationBuilder builder, Action<MarkupEquationBuilder> expression)
+        public MarkupEquationBuilder Bold(Action<MarkupEquationBuilder> expression)
         {
-            return builder;
-        }
-
-        public static MarkupEquationBuilder Bold(this MarkupEquationBuilder builder, Action<MarkupEquationBuilder> expression)
-        {
-            return builder;
+            return this;
         }
     }
 

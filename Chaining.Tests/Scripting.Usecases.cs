@@ -7,10 +7,9 @@ namespace Chaining.Tests
     {
 		private void SnippentsThatDontBreakTheBuild()
 		{
-			Action<string> destination = number => Console.Write(number);
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Value(1)
@@ -19,7 +18,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Literal("x")
@@ -28,7 +27,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new MarkupEquationBuilder(destination);
+                var builder = new MarkupEquationBuilder();
 
                 builder
                     .Value(1)
@@ -39,7 +38,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new MarkupEquationBuilder(destination);
+                var builder = new MarkupEquationBuilder();
 
                 builder
                     .Value(1)
@@ -55,7 +54,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new MarkupEquationBuilder(destination);
+                var builder = new MarkupEquationBuilder();
 
                 builder
                     .Value(1)
@@ -66,7 +65,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Value(1)
@@ -82,7 +81,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Value(1)
@@ -96,7 +95,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Value(1)
@@ -109,7 +108,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
                 var adding = true;
 
                 builder
@@ -121,7 +120,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
                 var needExtraValues = true;
 
                 builder
@@ -133,7 +132,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Map(Enumerable.Repeat(1, 10), (b, element) =>
@@ -142,7 +141,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Map(Enumerable.Range(100, 9),
@@ -157,7 +156,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Reduce(Enumerable.Range(0, 9),
@@ -167,7 +166,7 @@ namespace Chaining.Tests
             }
 
             {
-                var builder = new EquationBuilder(destination);
+                var builder = new EquationBuilder();
 
                 builder
                     .Reduce(Enumerable.Range(0, 9),
