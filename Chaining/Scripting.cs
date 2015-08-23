@@ -18,6 +18,36 @@ namespace Chaining
 
         }
     }
+
+    public static class EquationBuilderOperations
+    {
+        public static EquationBuilder Value(this EquationBuilder builder, int constant)
+        {
+            return builder;
+        }
+
+        public static EquationBuilder Literal(this EquationBuilder builder, string variable)
+        {
+            return builder;
+        }
+        public static EquationBuilder Add(this EquationBuilder builder)
+        {
+            return builder;
+        }
+        public static EquationBuilder Divide(this EquationBuilder builder)
+        {
+            return builder;
+        }
+        public static EquationBuilder Divide(this EquationBuilder builder, Action<EquationBuilder> expression)
+        {
+            return builder;
+        }
+
+        public static EquationBuilder Parentheses(this EquationBuilder builder, Action<EquationBuilder> expression)
+        {
+            return builder;
+        }
+    }
     
     public class MarkupEquationBuilder : IEquationBuilder
     {
@@ -32,44 +62,31 @@ namespace Chaining
         }
     }
 
-
-    public interface IValue
+    public static class MarkupEquationBuilderOperations
     {
-        int Constant { get; set; }
-    }
-
-    public class Value : IValue
-    {
-        public int Constant { get; set; }
-    }
-
-
-    public static class Operations
-    {
-        public static T Value<T>(this T builder, int constant) where T : IEquationBuilder
+        public static MarkupEquationBuilder Value(this MarkupEquationBuilder builder, int constant)
         {
-            return builder;
-        }
-        public static T Value<T>(this T builder, int constant, out IValue value) where T : IEquationBuilder
-        {
-            value = new Value();
-            value.Constant = constant;
             return builder;
         }
 
-        public static T Literal<T>(this T builder, string variable) where T : IEquationBuilder
+        public static MarkupEquationBuilder Literal(this MarkupEquationBuilder builder, string variable)
         {
             return builder;
         }
-        public static T Add<T>(this T builder) where T : IEquationBuilder
+        public static MarkupEquationBuilder Add(this MarkupEquationBuilder builder)
         {
             return builder;
         }
-        public static T Divide<T>(this T builder) where T : IEquationBuilder
+        public static MarkupEquationBuilder Divide(this MarkupEquationBuilder builder)
         {
             return builder;
         }
-        public static T Divide<T>(this T builder, Action<T> expression) where T : IEquationBuilder
+        public static MarkupEquationBuilder Divide(this MarkupEquationBuilder builder, Action<MarkupEquationBuilder> expression)
+        {
+            return builder;
+        }
+
+        public static MarkupEquationBuilder Parentheses(this MarkupEquationBuilder builder, Action<MarkupEquationBuilder> expression)
         {
             return builder;
         }
@@ -78,12 +95,11 @@ namespace Chaining
         {
             return builder;
         }
+    }
 
-        public static T Parentheses<T>(this T builder, Action<T> expression) where T : IEquationBuilder
-        {
-            return builder;
-        }
 
+    public static class ProgrammingOperations
+    {
         public static T If<T>(this T builder, bool condition, Action<T> onTrue, Action<T> onFalse = null) where T : IEquationBuilder
         {
             return builder;
