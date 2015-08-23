@@ -11,13 +11,33 @@ namespace Chaining.Tests
         [TestMethod]
         public void Tree_Contructor_WorksWithValueType()
         {
+            var tree = new Tree<int>();
+        }
+
+        [TestMethod]
+        public void Tree_Contructor_WorksWithClassType()
+        {
+            var tree = new Tree<string>();
+        }
+
+        [TestMethod]
+        public void Tree_Contructor_CreatesDefaultKeyProvider()
+        {
+            var tree = new Tree<string>();
+
+            Assert.IsNotNull(tree.KeyProvider);
+        }
+
+        [TestMethod]
+        public void Tree_ContructorWithKeyProvider_WorksWithValueType()
+        {
             var keyProvider = new KeyProvider();
 
             var tree = new Tree<int>(keyProvider);
         }
 
         [TestMethod]
-        public void Tree_Contructor_WorksWithClassType()
+        public void Tree_ContructorWithKeyProvider_WorksWithClassType()
         {
             var keyProvider = new KeyProvider();
 

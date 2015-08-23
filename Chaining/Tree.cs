@@ -22,6 +22,11 @@ namespace Chaining
             public ImmutableDictionary<KeyType, ImmutableArray<KeyType>> parentToChildrenDictionary;
         }
 
+        public Tree()
+            : this (new KeyProvider())
+        {
+        }
+
         public Tree(IKeyProvider keyProvider)
         {
             if (keyProvider == null)
@@ -29,8 +34,7 @@ namespace Chaining
                 throw new ArgumentException("keyProvider can't be null");
             }
 
-            this.KeyProvider = keyProvider;
-
+            KeyProvider = keyProvider;
             state = BuildInitialState();
         }
 
