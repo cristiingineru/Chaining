@@ -104,11 +104,21 @@ namespace Chaining
             return parentKey;
         }
 
-        public KeyType AddRoot(T value)
+        public Tree<T> AddRoot(T value)
         {
-            state.rootKey = KeyProvider.Key();
-            state.keyToValueDictionary = state.keyToValueDictionary.Add(state.rootKey, value);
-            return state.rootKey;
+            KeyType key;
+            return AddRoot(value, out key);
+        }
+
+        public Tree<T> AddRoot(T value, out KeyType key)
+        {
+            State<T> newState = state;
+
+            key = KeyProvider.Key();
+            newState.rootKey = key;
+            newState.keyToValueDictionary = state.keyToValueDictionary.Add(key, value);
+
+            return new Tree<T>(KeyProvider, newState);
         }
 
         public KeyType GetRoot()
