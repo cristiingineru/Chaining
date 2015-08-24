@@ -4,13 +4,50 @@ using System.Collections.Generic;
 namespace Chaining
 {
 
-    public interface IEquationBuilder { }
+    public interface IEquationBuilder
+    {
+
+    }
+
+    public static class IEquationBuilderOperations
+    {
+        public static T Value<T>(this T builder, int constant) where T : IEquationBuilder
+        {
+            return (builder as dynamic).Value(constant);
+        }
+        public static T Literal<T>(this T builder, string variable)
+        {
+            return (builder as dynamic).Literal(variable);
+        }
+        public static T Add<T>(this T builder)
+        {
+            return (builder as dynamic).Add();
+        }
+        public static T Divide<T>(this T builder)
+        {
+            return (builder as dynamic).Divide();
+        }
+        public static T Divide<T>(this T builder, Action<T> expression)
+        {
+            return (builder as dynamic).Divide(expression);
+        }
+        public static T Parentheses<T>(this T builder, Action<T> expression)
+        {
+            return (builder as dynamic).Parentheses(expression);
+        }
+    }
+
 
     public class EquationBuilder : IEquationBuilder
     {
         public EquationBuilder()
         {
 
+        }
+
+        public Tree<string> ToImmutableTree()
+        {
+            return new Tree<string>();
         }
 
         public EquationBuilder Value(int constant)
