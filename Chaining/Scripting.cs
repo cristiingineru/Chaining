@@ -4,9 +4,25 @@ using System.Collections.Generic;
 namespace Chaining
 {
 
-    public interface IEquationBuilder
+    public interface IItem
     {
 
+    }
+
+    public interface IIdentifier
+    {
+
+    }
+
+    public interface IFactory
+    {
+        IItem Create(IIdentifier identifier);
+    }
+
+
+    public interface IEquationBuilder
+    {
+        IEquationBuilder RegisterFactory(IFactory factory);
     }
 
     public static class IEquationBuilderOperations
@@ -15,25 +31,40 @@ namespace Chaining
         {
             return (builder as dynamic).Value(constant);
         }
-        public static T Literal<T>(this T builder, string variable)
+        public static T Literal<T>(this T builder, string variable) where T : IEquationBuilder
         {
             return (builder as dynamic).Literal(variable);
         }
-        public static T Add<T>(this T builder)
+        public static T Add<T>(this T builder) where T : IEquationBuilder
         {
             return (builder as dynamic).Add();
         }
-        public static T Divide<T>(this T builder)
+        public static T Divide<T>(this T builder) where T : IEquationBuilder
         {
             return (builder as dynamic).Divide();
         }
-        public static T Divide<T>(this T builder, Action<T> expression)
+        public static T Divide<T>(this T builder, Action<T> expression) where T : IEquationBuilder
         {
             return (builder as dynamic).Divide(expression);
         }
-        public static T Parentheses<T>(this T builder, Action<T> expression)
+        public static T Parentheses<T>(this T builder, Action<T> expression) where T : IEquationBuilder
         {
             return (builder as dynamic).Parentheses(expression);
+        }
+
+        public static T CreateItem<T>(this T builder, IIdentifier identifier) where T : IEquationBuilder
+        {
+            return (builder as dynamic).CreateItem(identifier);
+        }
+        public static T CreateItem<T>(this T builder, IIdentifier identifier, out IItem item) where T : IEquationBuilder
+        {
+            return (builder as dynamic).CreateItem(identifier, out item);
+        }
+        public static T CreateItem<U, T>(this T builder, IIdentifier identifier, out U item)
+            where U : IItem
+            where T : IEquationBuilder
+        {
+            return (builder as dynamic).CreateItem(identifier, out item);
         }
     }
 
