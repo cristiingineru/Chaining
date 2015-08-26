@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -133,13 +134,38 @@ namespace Chaining.Tests
 
 
         [TestMethod]
-        public void ToImmutableTree_WithEmptyBuilder_ReturnsTreeWithRoot()
+        public void ToImmutableTree_ForNotUsedBuilder_ReturnsTreeWithRoot()
         {
-            var builder = new EquationBuilder();
+            IEquationBuilder builder = new EquationBuilder();
 
-            var tree = builder.ToImmutableTree();
+            var tree = (builder as EquationBuilder).ToImmutableTree();
 
             Assert.IsTrue(tree.KeyProvider.IsValid(tree.GetRoot()));
+        }
+
+        [TestMethod]
+        public void ToImmutableTree_WithOneValue_ReturnsTreeWithRootAndChild()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder.Value(42);
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var children = tree.GetChildren(tree.GetRoot());
+            Assert.AreEqual(1, children.Count());
+        }
+
+        [TestMethod]
+        public void ToImmutableTree_WithTwoValues_ReturnsTreeWithRootAndTwoChildren()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder.Value(42);
+            builder = builder.Value(84);
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var children = tree.GetChildren(tree.GetRoot());
+            Assert.AreEqual(2, children.Count());
         }
 
 

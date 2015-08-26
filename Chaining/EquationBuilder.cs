@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KeyType = System.Int32;
 
 namespace Chaining
 {
     public class EquationBuilder : IEquationBuilder
     {
         private IEnumerable<IFactory> Factories { get; set; }
+        private Tree<String> Tree { get; set; }
+        private KeyType CurrentNodeKey { get; set; }
 
         public EquationBuilder()
             : this (Enumerable.Empty<IFactory>())
@@ -19,6 +22,15 @@ namespace Chaining
         public EquationBuilder(IEnumerable<IFactory> factories)
         {
             Factories = factories;
+            Tree = BuildDefaultTree();
+            CurrentNodeKey = Tree.GetRoot();
+        }
+
+        private Tree<string> BuildDefaultTree()
+        {
+            var tree = new Tree<string>();
+
+            return tree.AddRoot("[equation builder]");
         }
 
         public EquationBuilder CreateItem(IIdentifier identifier)
@@ -45,13 +57,12 @@ namespace Chaining
 
         public Tree<string> ToImmutableTree()
         {
-            var tree = new Tree<string>();
-            tree = tree.AddRoot("[equation builder]");
-            return tree;
+            return Tree;
         }
 
         public EquationBuilder Value(int constant)
         {
+            Tree = Tree.AddNode(constant.ToString(), Tree.GetRoot());
             return this;
         }
         public EquationBuilder Literal(string variable)
