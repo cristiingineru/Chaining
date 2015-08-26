@@ -57,7 +57,8 @@
     <Compile Include="Immutable.Tests.cs" />
     <Compile Include="KeyProvider.Tests.cs" />
     <Compile Include="Tree.Tests.cs" />
-    <Compile Include="Scripting.Tests.cs" />
+    <Compile Include="EquationBuilder.Tests.cs" />
+    <Compile Include="AdvancedMathOperators.Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chaining\Chaining.csproj">

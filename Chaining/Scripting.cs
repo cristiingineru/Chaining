@@ -16,13 +16,14 @@ namespace Chaining
 
     public interface IFactory
     {
+        bool CanCreate(IIdentifier identifier);
         IItem Create(IIdentifier identifier);
     }
 
 
     public interface IEquationBuilder
     {
-        IEquationBuilder RegisterFactory(IFactory factory);
+
     }
 
     public static class IEquationBuilderOperations
@@ -65,83 +66,6 @@ namespace Chaining
             where T : IEquationBuilder
         {
             return (builder as dynamic).CreateItem(identifier, out item);
-        }
-    }
-
-
-    public class EquationBuilder : IEquationBuilder
-    {
-        public EquationBuilder()
-        {
-
-        }
-
-        public Tree<string> ToImmutableTree()
-        {
-            return new Tree<string>();
-        }
-
-        public EquationBuilder Value(int constant)
-        {
-            return this;
-        }
-        public EquationBuilder Literal(string variable)
-        {
-            return this;
-        }
-        public EquationBuilder Add()
-        {
-            return this;
-        }
-        public EquationBuilder Divide()
-        {
-            return this;
-        }
-        public EquationBuilder Divide(Action<EquationBuilder> expression)
-        {
-            return this;
-        }
-        public EquationBuilder Parentheses(Action<EquationBuilder> expression)
-        {
-            return this;
-        }
-    }
-
-    
-    public class MarkupEquationBuilder : IEquationBuilder
-    {
-        public MarkupEquationBuilder()
-        {
-
-        }
-
-        public MarkupEquationBuilder Value(int constant)
-        {
-            return this;
-        }
-        public MarkupEquationBuilder Literal(string variable)
-        {
-            return this;
-        }
-        public MarkupEquationBuilder Add()
-        {
-            return this;
-        }
-        public MarkupEquationBuilder Divide()
-        {
-            return this;
-        }
-        public MarkupEquationBuilder Divide(Action<MarkupEquationBuilder> expression)
-        {
-            return this;
-        }
-        public MarkupEquationBuilder Parentheses(Action<MarkupEquationBuilder> expression)
-        {
-            return this;
-        }
-        public MarkupEquationBuilder Bold(Action<MarkupEquationBuilder> expression)
-        {
-            return this;
         }
     }
 
