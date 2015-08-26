@@ -45,7 +45,9 @@ namespace Chaining
 
         public Tree<string> ToImmutableTree()
         {
-            return new Tree<string>();
+            var tree = new Tree<string>();
+            tree = tree.AddRoot("[equation builder]");
+            return tree;
         }
 
         public EquationBuilder Value(int constant)

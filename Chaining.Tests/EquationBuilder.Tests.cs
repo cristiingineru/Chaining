@@ -131,6 +131,18 @@ namespace Chaining.Tests
             builder.CreateItem(id, out createItem);
         }
 
+
+        [TestMethod]
+        public void ToImmutableTree_WithEmptyBuilder_ReturnsTreeWithRoot()
+        {
+            var builder = new EquationBuilder();
+
+            var tree = builder.ToImmutableTree();
+
+            Assert.IsTrue(tree.KeyProvider.IsValid(tree.GetRoot()));
+        }
+
+
         private class TestIdentifier : IIdentifier
         {
 
