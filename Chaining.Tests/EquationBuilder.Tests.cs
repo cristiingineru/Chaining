@@ -168,6 +168,17 @@ namespace Chaining.Tests
             Assert.AreEqual(2, children.Count());
         }
 
+        [TestMethod]
+        public void ToImmutableTree_WithLiteral_ReturnsTreeWithRootAndChild()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder.Literal("x");
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var children = tree.GetChildren(tree.GetRoot());
+            Assert.AreEqual(1, children.Count());
+        }
 
         private class TestIdentifier : IIdentifier
         {

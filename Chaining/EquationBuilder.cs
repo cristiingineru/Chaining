@@ -62,11 +62,12 @@ namespace Chaining
 
         public EquationBuilder Value(int constant)
         {
-            Tree = Tree.AddNode(constant.ToString(), Tree.GetRoot());
+            Tree = Tree.AddNode(constant.ToString(), CurrentNodeKey);
             return this;
         }
         public EquationBuilder Literal(string variable)
         {
+            Tree = Tree.AddNode(variable, CurrentNodeKey);
             return this;
         }
         public EquationBuilder Add()
