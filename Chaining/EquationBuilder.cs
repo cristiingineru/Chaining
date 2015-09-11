@@ -72,14 +72,17 @@ namespace Chaining
         }
         public EquationBuilder Add()
         {
+            Tree = Tree.AddNode("+", CurrentNodeKey);
             return this;
         }
         public EquationBuilder Divide()
         {
+            Tree = Tree.AddNode("/", CurrentNodeKey);
             return this;
         }
         public EquationBuilder Divide(Action<EquationBuilder> expression)
         {
+            Tree = Tree.AddNode("/", CurrentNodeKey);
             return this;
         }
         public EquationBuilder Parentheses(Action<EquationBuilder> expression)

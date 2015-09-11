@@ -159,8 +159,9 @@ namespace Chaining.Tests
         public void ToImmutableTree_WithTwoValues_ReturnsTreeWithRootAndTwoChildren()
         {
             IEquationBuilder builder = new EquationBuilder();
-            builder = builder.Value(42);
-            builder = builder.Value(84);
+            builder = builder
+                .Value(42)
+                .Value(84);
 
             var tree = (builder as EquationBuilder).ToImmutableTree();
 
@@ -178,6 +179,60 @@ namespace Chaining.Tests
 
             var children = tree.GetChildren(tree.GetRoot());
             Assert.AreEqual(1, children.Count());
+        }
+
+        [TestMethod]
+        public void ToImmutableTree_WithAddAndTwoValues_ReturnsTreeWithRootAndChildren()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder
+                .Value(1)
+                .Add()
+                .Value(2);
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var children = tree.GetChildren(tree.GetRoot());
+            Assert.AreEqual(3, children.Count());
+        }
+
+        [TestMethod]
+        public void ToImmutableTree_WithAdd_ReturnsTreeWithAddOperator()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder.Add();
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var children = tree.GetChildren(tree.GetRoot());
+            var add = children.First();
+            Assert.AreEqual("+", tree.ValueOf(add));
+        }
+
+        [TestMethod]
+        public void ToImmutableTree_WithDivide_ReturnsTreeWithDivideOperator()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder.Divide();
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var children = tree.GetChildren(tree.GetRoot());
+            var add = children.First();
+            Assert.AreEqual("/", tree.ValueOf(add));
+        }
+
+        [TestMethod]
+        public void ToImmutableTree_WithDivideWithEmptyExpression_ReturnsTreeWithDivideOperator()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder.Divide(b => { });
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var children = tree.GetChildren(tree.GetRoot());
+            var add = children.First();
+            Assert.AreEqual("/", tree.ValueOf(add));
         }
 
         private class TestIdentifier : IIdentifier
