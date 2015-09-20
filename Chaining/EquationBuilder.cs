@@ -33,6 +33,13 @@ namespace Chaining
             return tree.AddRoot("[equation builder]");
         }
 
+        private EquationBuilder(Func<Tree<String>> defaultTreeBuilder)
+        {
+            Factories = Enumerable.Empty<IFactory>();
+            Tree = defaultTreeBuilder();
+            CurrentNodeKey = Tree.GetRoot();
+        }
+
         public EquationBuilder CreateItem(IIdentifier identifier)
         {
             IItem item;
@@ -82,19 +89,18 @@ namespace Chaining
         }
         public EquationBuilder Divide(Action<EquationBuilder> expression)
         {
-            KeyType newDivideKey;
-            Tree = Tree.AddNode("/", CurrentNodeKey, out newDivideKey);
-
-            var b = new EquationBuilder(this.Factories);
-            expression(b);
-            var innerTree = b.ToImmutableTree();
-            var innerTreeRoot = innerTree.GetRoot();
-            var innerTreeChildren = innerTree.GetChildren(innerTreeRoot);
-
-            if (innerTreeChildren.Any())
+            var keyProvider = this.Tree.KeyProvider;
+            var b = new EquationBuilder(() =>
             {
-                Tree = Tree.AddNode(innerTree.ValueOf(innerTreeChildren.First()), newDivideKey);
-            }
+                return new Tree<string>(keyProvider)
+                    .AddRoot("/");
+            });
+
+            expression(b);
+
+            var sourceTree = b.Tree;
+            var source = sourceTree.GetRoot();
+            Tree = Tree.CopyBranch(sourceTree, source, CurrentNodeKey);
 
             return this;
         }
