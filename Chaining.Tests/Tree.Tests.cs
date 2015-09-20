@@ -340,12 +340,46 @@ namespace Chaining.Tests
             sourceTree = sourceTree.AddNode(value3, l2);
             tree = tree.CopyBranch(sourceTree, sourceBranch, root);
 
-            var copiedNode1 = tree.GetChildren(tree.GetRoot()).First();
-            Assert.AreEqual(value1, tree.ValueOf(copiedNode1));
-            var copiedNode2 = tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).First();
-            Assert.AreEqual(value2, tree.ValueOf(copiedNode2));
-            var copiedNode3 = tree.GetChildren(tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).First()).First();
-            Assert.AreEqual(value3, tree.ValueOf(copiedNode3));
+            Assert.AreEqual(value1, tree.GetValueOfChild(0));
+            Assert.AreEqual(value2, tree.GetValueOfChild(0, 0));
+            Assert.AreEqual(value3, tree.GetValueOfChild(0, 0, 0));
+        }
+    }
+
+
+    public static class TreeNavigate
+    {
+        public static T GetValueOfChild<T>(this Tree<T> tree, int l1)
+        {
+            return tree.ValueOf(
+                tree.GetChildOfPath(l1));
+        }
+
+        public static T GetValueOfChild<T>(this Tree<T> tree, int l1, int l2)
+        {
+            return tree.ValueOf(
+                tree.GetChildOfPath(l1, l2));
+        }
+
+        public static T GetValueOfChild<T>(this Tree<T> tree, int l1, int l2, int l3)
+        {
+            return tree.ValueOf(
+                tree.GetChildOfPath(l1, l2, l3));
+        }
+
+        public static KeyType GetChildOfPath<T>(this Tree<T> tree, int l1)
+        {
+            return tree.GetChildren(tree.GetRoot()).ElementAt(l1);
+        }
+
+        public static KeyType GetChildOfPath<T>(this Tree<T> tree, int l1, int l2)
+        {
+            return tree.GetChildren(tree.GetChildren(tree.GetRoot()).ElementAt(l1)).ElementAt(l2);
+        }
+
+        public static KeyType GetChildOfPath<T>(this Tree<T> tree, int l1, int l2, int l3)
+        {
+            return tree.GetChildren(tree.GetChildren(tree.GetChildren(tree.GetRoot()).ElementAt(l1)).ElementAt(l2)).ElementAt(l3);
         }
     }
 }
