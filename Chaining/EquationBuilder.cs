@@ -82,7 +82,20 @@ namespace Chaining
         }
         public EquationBuilder Divide(Action<EquationBuilder> expression)
         {
-            Tree = Tree.AddNode("/", CurrentNodeKey);
+            KeyType newDivideKey;
+            Tree = Tree.AddNode("/", CurrentNodeKey, out newDivideKey);
+
+            var b = new EquationBuilder(this.Factories);
+            expression(b);
+            var innerTree = b.ToImmutableTree();
+            var innerTreeRoot = innerTree.GetRoot();
+            var innerTreeChildren = innerTree.GetChildren(innerTreeRoot);
+
+            if (innerTreeChildren.Any())
+            {
+                Tree = Tree.AddNode(innerTree.ValueOf(innerTreeChildren.First()), newDivideKey);
+            }
+
             return this;
         }
         public EquationBuilder Parentheses(Action<EquationBuilder> expression)

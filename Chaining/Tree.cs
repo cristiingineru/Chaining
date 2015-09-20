@@ -139,5 +139,46 @@ namespace Chaining
             }
             return Enumerable.Empty<KeyType>();
         }
+
+        public Tree<T> CopyBranch(Tree<T> sourceTree, KeyType sourceBranch, KeyType parentKey)
+        {
+            if (sourceTree == null)
+            {
+                return this;
+            }
+            try
+            {
+                sourceTree.ValueOf(sourceBranch);
+            }
+            catch(Exception)
+            {
+                return this;
+            }
+
+            var newTree = this;
+
+            var value = sourceTree.ValueOf(sourceBranch);
+            KeyType newBranchKey;
+            newTree = newTree.AddNode(value, parentKey, out newBranchKey);
+            newTree = RecursiveCopy(newTree, newBranchKey, sourceTree, sourceBranch);
+
+            return newTree;
+        }
+
+        private Tree<T> RecursiveCopy(Tree<T> destinationTree, KeyType destination, Tree<T> sourceTree, KeyType source)
+        {
+            var sourceChildren = sourceTree.GetChildren(source);
+
+            foreach(var sourceChild in sourceChildren)
+            {
+                var value = sourceTree.ValueOf(sourceChild);
+                KeyType newChild;
+
+                destinationTree = destinationTree.AddNode(value, destination, out newChild);
+                destinationTree = RecursiveCopy(destinationTree, newChild, sourceTree, sourceChild);
+            }
+
+            return destinationTree;
+        }
     }
 }

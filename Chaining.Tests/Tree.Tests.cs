@@ -231,5 +231,121 @@ namespace Chaining.Tests
             Assert.AreEqual(1, childen.Count());
             Assert.AreEqual(childKey, childen.ElementAt(0));
         }
+
+        [TestMethod]
+        public void Tree_CopyBranchWithInvalidSourceTree_NoOp()
+        {
+            var tree = new Tree<string>();
+            KeyType root;
+            tree = tree.AddRoot(String.Empty, out root);
+
+            Tree<string> sourceTree = null;
+            var sourceBranch = tree.KeyProvider.InvalidKey();
+            var changedTree = tree.CopyBranch(sourceTree, sourceBranch, root);
+
+            Assert.AreEqual(tree, changedTree);
+        }
+
+        [TestMethod]
+        public void Tree_CopyBranchWithInvalidSourceBranch_NoOp()
+        {
+            var tree = new Tree<string>();
+            KeyType root;
+            tree = tree.AddRoot(String.Empty, out root);
+
+            var sourceTree = new Tree<string>();
+            var sourceBranch = sourceTree.KeyProvider.InvalidKey();
+            var changedTree = tree.CopyBranch(sourceTree, sourceBranch, root);
+
+            Assert.AreEqual(tree, changedTree);
+        }
+
+        [TestMethod]
+        public void Tree_CopyBranchWithSingleNodeSource_CopiesTheSource()
+        {
+            var tree = new Tree<string>();
+            KeyType root;
+            tree = tree.AddRoot(String.Empty, out root);
+
+            var sourceTree = new Tree<string>();
+            KeyType sourceBranch;
+            var value = "x";
+            sourceTree = sourceTree.AddRoot(value, out sourceBranch);
+            tree = tree.CopyBranch(sourceTree, sourceBranch, root);
+
+            var copiedNode = tree.GetChildren(tree.GetRoot()).First();
+            Assert.AreEqual(value, tree.ValueOf(copiedNode));
+        }
+
+        [TestMethod]
+        public void Tree_CopyBranchWithTwoNodeSource_CopiesTheSource()
+        {
+            var tree = new Tree<string>();
+            KeyType root;
+            tree = tree.AddRoot(String.Empty, out root);
+
+            var sourceTree = new Tree<string>();
+            KeyType sourceBranch;
+            var value1 = "x1";
+            var value2 = "x2";
+            sourceTree = sourceTree.AddRoot(value1, out sourceBranch);
+            sourceTree = sourceTree.AddNode(value2, sourceBranch);
+            tree = tree.CopyBranch(sourceTree, sourceBranch, root);
+
+            var copiedNode1 = tree.GetChildren(tree.GetRoot()).First();
+            Assert.AreEqual(value1, tree.ValueOf(copiedNode1));
+            var copiedNode2 = tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).First();
+            Assert.AreEqual(value2, tree.ValueOf(copiedNode2));
+        }
+
+        [TestMethod]
+        public void Tree_CopyBranchWithThreeNodeSource_CopiesTheSource()
+        {
+            var tree = new Tree<string>();
+            KeyType root;
+            tree = tree.AddRoot(String.Empty, out root);
+
+            var sourceTree = new Tree<string>();
+            KeyType sourceBranch;
+            var value1 = "x1";
+            var value2 = "x2";
+            var value3 = "x3";
+            sourceTree = sourceTree.AddRoot(value1, out sourceBranch);
+            sourceTree = sourceTree.AddNode(value2, sourceBranch);
+            sourceTree = sourceTree.AddNode(value3, sourceBranch);
+            tree = tree.CopyBranch(sourceTree, sourceBranch, root);
+
+            var copiedNode1 = tree.GetChildren(tree.GetRoot()).First();
+            Assert.AreEqual(value1, tree.ValueOf(copiedNode1));
+            var copiedNode2 = tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).ElementAt(0);
+            Assert.AreEqual(value2, tree.ValueOf(copiedNode2));
+            var copiedNode3 = tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).ElementAt(1);
+            Assert.AreEqual(value3, tree.ValueOf(copiedNode3));
+        }
+
+        [TestMethod]
+        public void Tree_CopyBranchWithThreeLevelsDeepSource_CopiesTheSource()
+        {
+            var tree = new Tree<string>();
+            KeyType root;
+            tree = tree.AddRoot(String.Empty, out root);
+
+            var sourceTree = new Tree<string>();
+            KeyType sourceBranch, l2;
+            var value1 = "x1";
+            var value2 = "x2";
+            var value3 = "x3";
+            sourceTree = sourceTree.AddRoot(value1, out sourceBranch);
+            sourceTree = sourceTree.AddNode(value2, sourceBranch, out l2);
+            sourceTree = sourceTree.AddNode(value3, l2);
+            tree = tree.CopyBranch(sourceTree, sourceBranch, root);
+
+            var copiedNode1 = tree.GetChildren(tree.GetRoot()).First();
+            Assert.AreEqual(value1, tree.ValueOf(copiedNode1));
+            var copiedNode2 = tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).First();
+            Assert.AreEqual(value2, tree.ValueOf(copiedNode2));
+            var copiedNode3 = tree.GetChildren(tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).First()).First();
+            Assert.AreEqual(value3, tree.ValueOf(copiedNode3));
+        }
     }
 }

@@ -218,8 +218,8 @@ namespace Chaining.Tests
             var tree = (builder as EquationBuilder).ToImmutableTree();
 
             var children = tree.GetChildren(tree.GetRoot());
-            var add = children.First();
-            Assert.AreEqual("/", tree.ValueOf(add));
+            var divide = children.First();
+            Assert.AreEqual("/", tree.ValueOf(divide));
         }
 
         [TestMethod]
@@ -231,8 +231,22 @@ namespace Chaining.Tests
             var tree = (builder as EquationBuilder).ToImmutableTree();
 
             var children = tree.GetChildren(tree.GetRoot());
-            var add = children.First();
-            Assert.AreEqual("/", tree.ValueOf(add));
+            var divide = children.First();
+            Assert.AreEqual("/", tree.ValueOf(divide));
+        }
+
+        [TestMethod]
+        public void ToImmutableTree_WithDivideWithValueExpression_ReturnsTreeWithDivideOperatorAndValue()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder.Divide(b => b.Value(3));
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var divide = tree.GetChildren(tree.GetRoot()).First();
+            var value = tree.GetChildren(divide).First();
+            Assert.AreEqual("/", tree.ValueOf(divide));
+            Assert.AreEqual("3", tree.ValueOf(value));
         }
 
         private class TestIdentifier : IIdentifier
