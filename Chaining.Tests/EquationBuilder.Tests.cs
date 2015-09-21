@@ -249,6 +249,20 @@ namespace Chaining.Tests
             Assert.AreEqual("3", tree.ValueOf(value));
         }
 
+        [TestMethod]
+        public void ToImmutableTree_WithParenthesesAndValue_ReturnsTreeWithParenthesesAndValue()
+        {
+            IEquationBuilder builder = new EquationBuilder();
+            builder = builder.Parentheses(b => b.Value(3));
+
+            var tree = (builder as EquationBuilder).ToImmutableTree();
+
+            var parenthesis = tree.GetChildren(tree.GetRoot()).First();
+            var value = tree.GetChildren(parenthesis).First();
+            Assert.AreEqual("()", tree.ValueOf(parenthesis));
+            Assert.AreEqual("3", tree.ValueOf(value));
+        }
+
         private class TestIdentifier : IIdentifier
         {
 

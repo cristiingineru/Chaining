@@ -11,7 +11,7 @@ namespace Chaining
     {
         private IEnumerable<IFactory> Factories { get; set; }
         private Tree<String> Tree { get; set; }
-        private KeyType CurrentNodeKey { get; set; }
+        private KeyType Root { get; set; }
 
         public EquationBuilder()
             : this (Enumerable.Empty<IFactory>())
@@ -20,24 +20,23 @@ namespace Chaining
         }
 
         public EquationBuilder(IEnumerable<IFactory> factories)
+            : this (factories, null)
+        {
+        }
+
+        private EquationBuilder(IEnumerable<IFactory> factories, string rootValue)
         {
             Factories = factories;
-            Tree = BuildDefaultTree();
-            CurrentNodeKey = Tree.GetRoot();
+            Tree = BuildDefaultTree(rootValue);
+            Root = Tree.GetRoot();
         }
 
-        private Tree<string> BuildDefaultTree()
+        private Tree<string> BuildDefaultTree(string rootValue)
         {
             var tree = new Tree<string>();
+            rootValue = rootValue ?? "[equation builder]";   
 
-            return tree.AddRoot("[equation builder]");
-        }
-
-        private EquationBuilder(Func<Tree<String>> defaultTreeBuilder)
-        {
-            Factories = Enumerable.Empty<IFactory>();
-            Tree = defaultTreeBuilder();
-            CurrentNodeKey = Tree.GetRoot();
+            return tree.AddRoot(rootValue);
         }
 
         public EquationBuilder CreateItem(IIdentifier identifier)
@@ -69,44 +68,45 @@ namespace Chaining
 
         public EquationBuilder Value(int constant)
         {
-            Tree = Tree.AddNode(constant.ToString(), CurrentNodeKey);
+            Tree = Tree.AddNode(constant.ToString(), Root);
             return this;
         }
         public EquationBuilder Literal(string variable)
         {
-            Tree = Tree.AddNode(variable, CurrentNodeKey);
+            Tree = Tree.AddNode(variable, Root);
             return this;
         }
         public EquationBuilder Add()
         {
-            Tree = Tree.AddNode("+", CurrentNodeKey);
+            Tree = Tree.AddNode("+", Root);
             return this;
         }
         public EquationBuilder Divide()
         {
-            Tree = Tree.AddNode("/", CurrentNodeKey);
+            Tree = Tree.AddNode("/", Root);
             return this;
         }
         public EquationBuilder Divide(Action<EquationBuilder> expression)
         {
-            var keyProvider = this.Tree.KeyProvider;
-            var b = new EquationBuilder(() =>
-            {
-                return new Tree<string>(keyProvider)
-                    .AddRoot("/");
-            });
+            return ScriptNestedExpression(expression, "/");
+        }
+        public EquationBuilder Parentheses(Action<EquationBuilder> expression)
+        {
+            return ScriptNestedExpression(expression, "()");
+        }
+
+        private EquationBuilder ScriptNestedExpression(Action<EquationBuilder> expression, string rootValue)
+        {
+            var b = new EquationBuilder(this.Factories, rootValue);
 
             expression(b);
 
             var sourceTree = b.Tree;
-            var source = sourceTree.GetRoot();
-            Tree = Tree.CopyBranch(sourceTree, source, CurrentNodeKey);
+            var sourceRoot = b.Tree.GetRoot();
+            Tree = Tree.CopyBranch(sourceTree, sourceRoot, Root);
 
             return this;
         }
-        public EquationBuilder Parentheses(Action<EquationBuilder> expression)
-        {
-            return this;
-        }
+
     }
 }
