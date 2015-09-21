@@ -265,7 +265,7 @@ namespace Chaining.Tests
         }
 
         [TestMethod]
-        public void ToImmutableTree_WithParenthesisAndValue_ReturnsTreeWithParenthesesAndValue()
+        public void ToImmutableTree_WithParenthesesAndValue_ReturnsTreeWithParenthesesAndValue()
         {
             IEquationBuilder builder = new EquationBuilder();
             builder = builder.Parentheses(b => b.Value(3));
@@ -279,7 +279,7 @@ namespace Chaining.Tests
         }
 
         [TestMethod]
-        public void Parenthesis_WithExpressionAndFactory_AllowsCreatingNewItemsInsideExpression()
+        public void Parentheses_WithExpressionAndFactory_AllowsCreatingNewItemsInsideExpression()
         {
             var id = new Mock<IIdentifier>().Object;
             var item = new Mock<IItem>().Object;
