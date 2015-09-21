@@ -250,7 +250,22 @@ namespace Chaining.Tests
         }
 
         [TestMethod]
-        public void ToImmutableTree_WithParenthesesAndValue_ReturnsTreeWithParenthesesAndValue()
+        public void Divide_WithExpressionAndFactory_AllowsCreatingNewItemsInsideExpression()
+        {
+            var id = new Mock<IIdentifier>().Object;
+            var item = new Mock<IItem>().Object;
+            var factory = new Mock<IFactory>(MockBehavior.Strict);
+            factory.Setup(o => o.CanCreate(id)).Returns(true);
+            factory.Setup(o => o.Create(id)).Returns(item);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object });
+
+            builder = builder.Divide(b => b.CreateItem(id));
+
+            factory.VerifyAll();
+        }
+
+        [TestMethod]
+        public void ToImmutableTree_WithParenthesisAndValue_ReturnsTreeWithParenthesesAndValue()
         {
             IEquationBuilder builder = new EquationBuilder();
             builder = builder.Parentheses(b => b.Value(3));
@@ -261,6 +276,21 @@ namespace Chaining.Tests
             var value = tree.GetChildren(parenthesis).First();
             Assert.AreEqual("()", tree.ValueOf(parenthesis));
             Assert.AreEqual("3", tree.ValueOf(value));
+        }
+
+        [TestMethod]
+        public void Parenthesis_WithExpressionAndFactory_AllowsCreatingNewItemsInsideExpression()
+        {
+            var id = new Mock<IIdentifier>().Object;
+            var item = new Mock<IItem>().Object;
+            var factory = new Mock<IFactory>(MockBehavior.Strict);
+            factory.Setup(o => o.CanCreate(id)).Returns(true);
+            factory.Setup(o => o.Create(id)).Returns(item);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object });
+
+            builder = builder.Parentheses(b => b.CreateItem(id));
+
+            factory.VerifyAll();
         }
     }
 }

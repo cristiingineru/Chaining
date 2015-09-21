@@ -341,7 +341,7 @@ namespace Chaining.Tests
     }
 
 
-    public static class TreeNavigate
+    public static class TreeNavigation
     {
         public static T GetValueOfChild<T>(this Tree<T> tree, int l1)
         {
