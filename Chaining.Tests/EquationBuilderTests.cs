@@ -12,7 +12,7 @@ namespace Chaining.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreateItem_WithNoFactory_Fails()
         {
-            var id = new TestIdentifier();
+            var id = new Mock<IIdentifier>().Object;
 
             IEquationBuilder builder = new EquationBuilder();
 
@@ -23,7 +23,7 @@ namespace Chaining.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreateItemReturningItem_WithNoFactory_Fails()
         {
-            var id = new TestIdentifier();
+            var id = new Mock<IIdentifier>().Object;
 
             IEquationBuilder builder = new EquationBuilder();
 
@@ -35,10 +35,10 @@ namespace Chaining.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreateItem_WithFactoryAndUnknownIdentifier_Fails()
         {
-            var id = new TestIdentifier();
-            var mock = new Mock<IFactory>();
-            mock.Setup(o => o.CanCreate(id)).Returns(false);
-            IEquationBuilder builder = new EquationBuilder(new[] { mock.Object });
+            var id = new Mock<IIdentifier>().Object;
+            var factory = new Mock<IFactory>();
+            factory.Setup(o => o.CanCreate(id)).Returns(false);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object });
 
             builder.CreateItem(id);
         }
@@ -47,10 +47,10 @@ namespace Chaining.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreateItemReturningItem_WithFactoryAndUnknownIdentifier_Fails()
         {
-            var id = new TestIdentifier();
-            var mock = new Mock<IFactory>();
-            mock.Setup(o => o.CanCreate(id)).Returns(false);
-            IEquationBuilder builder = new EquationBuilder(new[] { mock.Object });
+            var id = new Mock<IIdentifier>().Object;
+            var factory = new Mock<IFactory>();
+            factory.Setup(o => o.CanCreate(id)).Returns(false);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object });
 
             IItem item;
             builder.CreateItem(id, out item);
@@ -59,12 +59,12 @@ namespace Chaining.Tests
         [TestMethod]
         public void CreateItemReturningItem_WithFactoryAndKnownIdentifier_ReturnsTheNewItem()
         {
-            var id = new TestIdentifier();
-            var item = new TestItem();
-            var mock = new Mock<IFactory>();
-            mock.Setup(o => o.CanCreate(id)).Returns(true);
-            mock.Setup(o => o.Create(id)).Returns(item);
-            IEquationBuilder builder = new EquationBuilder(new[] { mock.Object });
+            var id = new Mock<IIdentifier>().Object;
+            var item = new Mock<IItem>().Object;
+            var factory = new Mock<IFactory>();
+            factory.Setup(o => o.CanCreate(id)).Returns(true);
+            factory.Setup(o => o.Create(id)).Returns(item);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object });
 
             IItem createItem;
             builder.CreateItem(id, out createItem);
@@ -75,12 +75,12 @@ namespace Chaining.Tests
         [TestMethod]
         public void CreateItem_WithFactoryAndKnownIdentifier_ReturnsTheBuilder()
         {
-            var id = new TestIdentifier();
-            var item = new TestItem();
-            var mock = new Mock<IFactory>();
-            mock.Setup(o => o.CanCreate(id)).Returns(true);
-            mock.Setup(o => o.Create(id)).Returns(item);
-            IEquationBuilder builder = new EquationBuilder(new[] { mock.Object });
+            var id = new Mock<IIdentifier>().Object;
+            var item = new Mock<IItem>().Object;
+            var factory = new Mock<IFactory>();
+            factory.Setup(o => o.CanCreate(id)).Returns(true);
+            factory.Setup(o => o.Create(id)).Returns(item);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object });
 
             var returnedBuilder = builder.CreateItem(id);
 
@@ -90,12 +90,12 @@ namespace Chaining.Tests
         [TestMethod]
         public void CreateItemReturningItem_WithFactoryAndKnownIdentifier_ReturnsTheBuilder()
         {
-            var id = new TestIdentifier();
-            var item = new TestItem();
-            var mock = new Mock<IFactory>();
-            mock.Setup(o => o.CanCreate(id)).Returns(true);
-            mock.Setup(o => o.Create(id)).Returns(item);
-            IEquationBuilder builder = new EquationBuilder(new[] { mock.Object });
+            var id = new Mock<IIdentifier>().Object;
+            var item = new Mock<IItem>().Object;
+            var factory = new Mock<IFactory>();
+            factory.Setup(o => o.CanCreate(id)).Returns(true);
+            factory.Setup(o => o.Create(id)).Returns(item);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object });
 
             IItem createItem;
             var returnedBuilder = builder.CreateItem(id, out createItem);
@@ -107,12 +107,12 @@ namespace Chaining.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreateItem_WithFactoriesThatCanCreateSameItem_Fails()
         {
-            var id = new TestIdentifier();
-            var item = new TestItem();
-            var mock = new Mock<IFactory>();
-            mock.Setup(o => o.CanCreate(id)).Returns(true);
-            mock.Setup(o => o.Create(id)).Returns(item);
-            IEquationBuilder builder = new EquationBuilder(new[] { mock.Object, mock.Object });
+            var id = new Mock<IIdentifier>().Object;
+            var item = new Mock<IItem>().Object;
+            var factory = new Mock<IFactory>();
+            factory.Setup(o => o.CanCreate(id)).Returns(true);
+            factory.Setup(o => o.Create(id)).Returns(item);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object, factory.Object });
 
             builder.CreateItem(id);
         }
@@ -121,12 +121,12 @@ namespace Chaining.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void CreateItemReturningItem_WithFactoriesThatCanCreateSameItem_Fails()
         {
-            var id = new TestIdentifier();
-            var item = new TestItem();
-            var mock = new Mock<IFactory>();
-            mock.Setup(o => o.CanCreate(id)).Returns(true);
-            mock.Setup(o => o.Create(id)).Returns(item);
-            IEquationBuilder builder = new EquationBuilder(new[] { mock.Object, mock.Object });
+            var id = new Mock<IIdentifier>().Object;
+            var item = new Mock<IItem>().Object;
+            var factory = new Mock<IFactory>();
+            factory.Setup(o => o.CanCreate(id)).Returns(true);
+            factory.Setup(o => o.Create(id)).Returns(item);
+            IEquationBuilder builder = new EquationBuilder(new[] { factory.Object, factory.Object });
 
             IItem createItem;
             builder.CreateItem(id, out createItem);
@@ -261,16 +261,6 @@ namespace Chaining.Tests
             var value = tree.GetChildren(parenthesis).First();
             Assert.AreEqual("()", tree.ValueOf(parenthesis));
             Assert.AreEqual("3", tree.ValueOf(value));
-        }
-
-        private class TestIdentifier : IIdentifier
-        {
-
-        }
-
-        private class TestItem : IItem
-        {
-
         }
     }
 }
