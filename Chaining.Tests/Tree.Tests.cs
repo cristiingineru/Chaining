@@ -273,8 +273,7 @@ namespace Chaining.Tests
             sourceTree = sourceTree.AddRoot(value, out sourceBranch);
             tree = tree.CopyBranch(sourceTree, sourceBranch, root);
 
-            var copiedNode = tree.GetChildren(tree.GetRoot()).First();
-            Assert.AreEqual(value, tree.ValueOf(copiedNode));
+            Assert.AreEqual(value, tree.GetValueOfChild(0));
         }
 
         [TestMethod]
@@ -292,10 +291,8 @@ namespace Chaining.Tests
             sourceTree = sourceTree.AddNode(value2, sourceBranch);
             tree = tree.CopyBranch(sourceTree, sourceBranch, root);
 
-            var copiedNode1 = tree.GetChildren(tree.GetRoot()).First();
-            Assert.AreEqual(value1, tree.ValueOf(copiedNode1));
-            var copiedNode2 = tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).First();
-            Assert.AreEqual(value2, tree.ValueOf(copiedNode2));
+            Assert.AreEqual(value1, tree.GetValueOfChild(0));
+            Assert.AreEqual(value2, tree.GetValueOfChild(0, 0));
         }
 
         [TestMethod]
@@ -315,12 +312,9 @@ namespace Chaining.Tests
             sourceTree = sourceTree.AddNode(value3, sourceBranch);
             tree = tree.CopyBranch(sourceTree, sourceBranch, root);
 
-            var copiedNode1 = tree.GetChildren(tree.GetRoot()).First();
-            Assert.AreEqual(value1, tree.ValueOf(copiedNode1));
-            var copiedNode2 = tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).ElementAt(0);
-            Assert.AreEqual(value2, tree.ValueOf(copiedNode2));
-            var copiedNode3 = tree.GetChildren(tree.GetChildren(tree.GetRoot()).First()).ElementAt(1);
-            Assert.AreEqual(value3, tree.ValueOf(copiedNode3));
+            Assert.AreEqual(value1, tree.GetValueOfChild(0));
+            Assert.AreEqual(value2, tree.GetValueOfChild(0, 0));
+            Assert.AreEqual(value3, tree.GetValueOfChild(0, 1));
         }
 
         [TestMethod]
