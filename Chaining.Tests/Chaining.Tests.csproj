@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1507.0118\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -56,6 +57,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="IEquationBuilderDynamicContractChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ImmutableTests.cs" />
     <Compile Include="KeyProviderTests.cs" />

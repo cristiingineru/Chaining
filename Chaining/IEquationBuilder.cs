@@ -70,13 +70,9 @@ namespace Chaining
         {
             return (builder as dynamic).CreateItem(identifier);
         }
-        public static T CreateItem<T>(this T builder, IIdentifier identifier, out IItem item) where T : IEquationBuilder
-        {
-            return (builder as dynamic).CreateItem(identifier, out item);
-        }
         public static T CreateItem<U, T>(this T builder, IIdentifier identifier, out U item)
-            where U : IItem
             where T : IEquationBuilder
+            where U : IItem
         {
             return (builder as dynamic).CreateItem(identifier, out item);
         }

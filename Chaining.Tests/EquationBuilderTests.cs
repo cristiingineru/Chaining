@@ -9,6 +9,14 @@ namespace Chaining.Tests
     public class EquationBuilderTests
     {
         [TestMethod]
+        public void IsConformWithIEquationBuilderDynamicContract()
+        {
+            var builder = new EquationBuilder();
+
+            Assert.IsTrue(IEquationBuilderDynamicContractChecker.IsConform(builder));
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void CreateItem_WithNoFactory_Fails()
         {
