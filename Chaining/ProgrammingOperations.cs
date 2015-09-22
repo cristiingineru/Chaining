@@ -13,6 +13,8 @@ namespace Chaining
             return builder;
         }
 
+        // Switch ?
+
         public static T Map<T, U>(this T builder, IEnumerable<U> collection, Action<T, U> action) where T : IEquationBuilder
         {
             return builder;

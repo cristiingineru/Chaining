@@ -26,6 +26,8 @@ namespace Chaining
     /// to allow channing without losing the initial type.
     /// 
     /// Any method specified here has to be stronly typed thus all the implementers would be forced to returned the same type.
+    /// 
+    /// Each class that implements this method should have a test that checks the conformity with the dynamic contract.
     /// </summary>
     public interface IEquationBuilder
     {
@@ -70,7 +72,7 @@ namespace Chaining
         {
             return (builder as dynamic).CreateItem(identifier);
         }
-        public static T CreateItem<U, T>(this T builder, IIdentifier identifier, out U item)
+        public static T CreateItem<T, U>(this T builder, IIdentifier identifier, out U item)
             where T : IEquationBuilder
             where U : IItem
         {
