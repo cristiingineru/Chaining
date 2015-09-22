@@ -50,7 +50,7 @@
     <Compile Include="EquationBuilder.cs" />
     <Compile Include="MarkupEquationBuilder.cs" />
     <Compile Include="ProgrammingOperations.cs" />
-    <Compile Include="Scripting.cs" />
+    <Compile Include="IEquationBuilder.cs" />
     <Compile Include="KeyProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AdvancedMathOperations.cs" />
